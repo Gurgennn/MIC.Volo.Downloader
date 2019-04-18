@@ -24,7 +24,7 @@ namespace Mic_Volo_Downloader
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        CancellationTokenSource src;
 
         public MainWindow()
         {
@@ -59,32 +59,43 @@ namespace Mic_Volo_Downloader
                 dlg.FileName = adress.AbsoluteUri.Substring(TextUrl.Text.LastIndexOf('/') + 1);
                 dlg.ShowDialog();
 
+                src = new CancellationTokenSource();
+                src.Token.Register(() =>
+                {
+                    client.CancelAsync();
+                });
                 try
                 {
-                    client.DownloadProgressChanged+= (s, ev) =>
+                    Cancel_Button.IsEnabled = true;
+                    client.DownloadProgressChanged += (s, ev) =>
                     {
                         DownloadProgressBar.Value = ev.ProgressPercentage;
-                        TextOutput.Text = "Downloading...";
                     };
                     await client.DownloadFileTaskAsync(adress, dlg.FileName);
                 }
-                catch(WebException ex)
+                catch (WebException exception)
                 {
-                    MessageBox.Show(ex.Message);
+                    TextOutput.Text = exception.Message;
                 }
                 catch (Exception)
                 {
+
                     throw;
                 }
                 finally
                 {
                     Download_Button.IsEnabled = true;
-                    TextOutput.Text = "Download Completed!";
                     DownloadProgressBar.Value = 0;
-
+                    if (src.IsCancellationRequested)
+                    {
+                        TextOutput.Text = "Download canceled";
+                    }
+                    else
+                    {
+                        TextOutput.Text = "Download completed!";
+                    }
+                    Cancel_Button.IsEnabled = false;
                 }
-               
-
 
             }
         }
