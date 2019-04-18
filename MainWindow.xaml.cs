@@ -24,21 +24,69 @@ namespace Mic_Volo_Downloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private  void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+            using (var client = new WebClient())
+            {
+                TextOutput.Text = "";
+                Download_Button.IsEnabled = false;
+                TextOutput.Text = string.Empty;
+                Uri adress;
+                if (TextUrl.Text == string.Empty || !Uri.IsWellFormedUriString(TextUrl.Text, UriKind.RelativeOrAbsolute))
+                {
+                    MessageBox.Show("Enter valid url");
+                    Download_Button.IsEnabled = true;
+                    return;
+                }
+                try
+                {
+                    adress = new Uri(TextUrl.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Enter valid url");
+                    Download_Button.IsEnabled = true;
+                    return;
+                }
+                var dlg = new SaveFileDialog();
+                dlg.FileName = adress.AbsoluteUri.Substring(TextUrl.Text.LastIndexOf('/') + 1);
+                dlg.ShowDialog();
+
+                try
+                {
+                    await client.DownloadFileTaskAsync(adress, dlg.FileName);
+                }
+                catch(WebException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    Download_Button.IsEnabled = true;
+                    TextOutput.Text = "Download Completed!";
+
+
+                }
+               
+
+
+            }
         }
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
     }
 }
