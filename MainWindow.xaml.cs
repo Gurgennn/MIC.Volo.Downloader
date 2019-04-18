@@ -61,6 +61,11 @@ namespace Mic_Volo_Downloader
 
                 try
                 {
+                    client.DownloadProgressChanged+= (s, ev) =>
+                    {
+                        DownloadProgressBar.Value = ev.ProgressPercentage;
+                        TextOutput.Text = "Downloading...";
+                    };
                     await client.DownloadFileTaskAsync(adress, dlg.FileName);
                 }
                 catch(WebException ex)
@@ -75,7 +80,7 @@ namespace Mic_Volo_Downloader
                 {
                     Download_Button.IsEnabled = true;
                     TextOutput.Text = "Download Completed!";
-
+                    DownloadProgressBar.Value = 0;
 
                 }
                

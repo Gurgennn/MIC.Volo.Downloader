@@ -39,6 +39,16 @@
         </Button>
         <TextBlock x:Name="TextOutput" HorizontalAlignment="Left" Margin="10,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="170" Width="347" IsEnabled="False" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Visible" FontSize="20" Foreground="#FFFB1111"/>
         <Button x:Name="Cancel_Button" Content="Cancel" HorizontalAlignment="Left" Margin="362,10,0,0" VerticalAlignment="Top" Width="97" Grid.RowSpan="2" Height="23" Click="Cancel_Button_Click" IsEnabled="False"/>
+        <ProgressBar x:Name="DownloadProgressBar" HorizontalAlignment="Left" Height="22" Margin="10,11,0,0" Grid.Row="1" VerticalAlignment="Top" Width="258" RenderTransformOrigin="0.5,0.5">
+            <ProgressBar.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.288"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </ProgressBar.RenderTransform>
+        </ProgressBar>
 
     </Grid>
 </Window>
