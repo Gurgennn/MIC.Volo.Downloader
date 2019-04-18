@@ -59,6 +59,8 @@ namespace Mic_Volo_Downloader
                 dlg.FileName = adress.AbsoluteUri.Substring(TextUrl.Text.LastIndexOf('/') + 1);
                 dlg.ShowDialog();
 
+                TextOutput.Text = "Downloading...";
+
                 src = new CancellationTokenSource();
                 src.Token.Register(() =>
                 {
@@ -102,7 +104,7 @@ namespace Mic_Volo_Downloader
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            src.Cancel();
         }
     }
 }
